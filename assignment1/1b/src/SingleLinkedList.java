@@ -1,11 +1,14 @@
 /**
- * Created by Natasha on 17-May-17.
- */
-
+ * Single Linked list for getting k to last element.
+ * **/
 class SingleLinkedList<T> {
     private Node head;
     private int size = 0;
 
+    /**
+     * Add the element
+     * @param el -- element to add
+     */
     void add(T el) {
         size++;
         Node newNode = new Node(el);
@@ -21,10 +24,11 @@ class SingleLinkedList<T> {
         t.next = newNode;
     }
 
-    int getSize() {
-        return size;
-    }
-
+    /**
+     * Get the element
+     * @param i -- number of the element
+     * @return -- element
+     */
     T getElement(int i) {
         if (head == null) {
             return null;
@@ -39,6 +43,18 @@ class SingleLinkedList<T> {
         return k == i ? t.element : null;
     }
 
+    /**
+     * Get k to last element
+     * @param k -- number of the elemnt from end of list
+     * @return -- element
+     */
+    T getKToLast(int k) {
+        return getElement(size - k - 1);
+    }
+
+    /**
+     * Class for nodes of list
+     */
     private class Node {
         T element;
         Node next;

@@ -1,10 +1,5 @@
 import java.util.Scanner;
 
-/**
- * Created by Natasha on 17-May-17.
- */
-
-
 public class Main {
     public static void main(String[] args) {
         SingleLinkedList<Integer> list = new SingleLinkedList<>();
@@ -15,11 +10,13 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int k = scanner.nextInt();
 
-        int res = getKToLast(list, k);
-        System.out.print(res);
+        // k == 0 -> 9
+        // k == 1 -> 8
+        // ...
+        // k == 9 -> 0
+        // k > 9 || k < 0 -> null
+        System.out.print(list.getKToLast(k));
     }
 
-    private static <T> T getKToLast(SingleLinkedList<T> list, int k) {
-        return list.getElement(list.getSize() - k - 1);
-    }
+
 }

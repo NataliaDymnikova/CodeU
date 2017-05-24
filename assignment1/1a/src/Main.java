@@ -2,18 +2,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-/**
- * Created by Natasha on 17-May-17.
- */
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String str1 = scanner.next();
         String str2 = scanner.next();
+
         boolean b = isPermutation(str1, str2);
         System.out.print(b);
     }
 
+    /**
+     * Are two strings permutation each other or not.
+     * @param str1 -- first string
+     * @param str2 -- second string
+     * @return -- are strings permutation
+     */
     private static boolean isPermutation(String str1, String str2) {
         Map<Character, Integer> dict = new HashMap<>();
 
@@ -28,6 +32,6 @@ public class Main {
                 return false;
             }
         }
-        return true;
+        return dict.entrySet().stream().allMatch(entry -> entry.getValue() == 0);
     }
 }
