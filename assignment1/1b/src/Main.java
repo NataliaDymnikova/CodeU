@@ -14,7 +14,7 @@ public class Main {
         // k == 1 -> 8
         // ...
         // k == 9 -> 0
-        // k > 9 || k < 0 -> null
+        // k > 9 || k < 0 -> exception
         System.out.print(list.getKToLast(k));
     }
 

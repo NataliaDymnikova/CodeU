@@ -23,15 +23,16 @@ public class Main {
 
         str1 = str1.toLowerCase();
         str2 = str2.toLowerCase();
-        for (char i : str1.toCharArray()) {
-            dict.put(i, 1 + dict.getOrDefault(i, 0));
+        int size = str1.length();
+        if (size != str2.length()) {
+            return false;
         }
-        for (char i : str2.toCharArray()) {
-            int c = dict.compute(i, (ch, j) -> j == null ? -1 : j - 1);
-            if (c < 0) {
-                return false;
-            }
+
+        for (int i = 0; i < size; i++) {
+            dict.compute(str1.charAt(i), (c, j) -> j == null ? 1 : j + 1);
+            dict.compute(str2.charAt(i), (c, j) -> j == null ? -1 : j - 1);
         }
+
         return dict.entrySet().stream().allMatch(entry -> entry.getValue() == 0);
     }
 }
