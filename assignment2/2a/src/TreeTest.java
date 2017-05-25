@@ -29,28 +29,26 @@ public class TreeTest {
     }
 
     @Test
-    public void testForSingleParent() {
+    public void testForSingleParent() throws TreeException.ElementDoesntFound {
         int i = 0;
         assertEquals(tree.getAncestors(i), asList(-2));
     }
 
     @Test
-    public void testForSeveralParent() {
+    public void testForSeveralParent() throws TreeException.ElementDoesntFound {
         int i = 9;
         assertEquals(tree.getAncestors(i), asList(7, 5, 3, 1, -1, -2));
     }
 
     @Test
-    public void testForNoParent() {
+    public void testForNoParent() throws TreeException.ElementDoesntFound {
         int i = -2;
         assertEquals(tree.getAncestors(i), emptyList());
     }
 
-
-    @Test
-    public void testForNoElement() {
+    @Test(expected = TreeException.ElementDoesntFound.class)
+    public void testForNoElement() throws TreeException.ElementDoesntFound {
         int i = 10;
-        assertEquals(tree.getAncestors(i), emptyList());
+        tree.getAncestors(i);
     }
-
 }
