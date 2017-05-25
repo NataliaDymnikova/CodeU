@@ -9,7 +9,7 @@ class TreeException {
     }
 
     static class ElementDoesntFound extends Exception {
-        public ElementDoesntFound(String str) {
+        ElementDoesntFound(String str) {
             super(str);
         }
     }

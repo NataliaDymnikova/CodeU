@@ -32,14 +32,8 @@ public class Tree<T> {
         if (parentVal.equals(value)) {
             if (isLeft) {
                 left = new Tree<T>(newValue, this, left, null);
-                if (left.left != null) {
-                    left.left.parent = left;
-                }
             } else {
                 right = new Tree<T>(newValue, this, null, right);
-                if (right.right != null) {
-                    right.right.parent = right;
-                }
             }
             return true;
         } else {

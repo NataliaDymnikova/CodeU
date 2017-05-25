@@ -38,8 +38,13 @@ public class TreeTest {
     }
 
     @Test(expected = TreeException.NoCommonAncestor.class)
-    public void testForRootElement() throws Exception {
+    public void testForFirstRootElement() throws Exception {
         tree.getCommonAncestor(-2, 10);
+    }
+
+    @Test(expected = TreeException.NoCommonAncestor.class)
+    public void testForSecondRootElement() throws Exception {
+        tree.getCommonAncestor(0, -2);
     }
 
     @Test(expected = TreeException.ElementDoesntFound.class)
