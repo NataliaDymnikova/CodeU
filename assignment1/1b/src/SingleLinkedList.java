@@ -6,7 +6,7 @@ class SingleLinkedList<T> {
     private int size = 0;
 
     /**
-     * Add the element
+     * Add the element to the tail
      * @param el -- element to add
      */
     void add(T el) {
@@ -25,13 +25,13 @@ class SingleLinkedList<T> {
     }
 
     /**
-     * Get the element
+     * Get the element with number
      * @param i -- number of the element
      * @return -- element
      */
     T getElement(int i) {
         if (head == null) {
-            return null;
+            throw new IndexOutOfBoundsException();
         }
         Node t = head;
         int k = 0;
@@ -40,12 +40,16 @@ class SingleLinkedList<T> {
             k++;
         }
 
-        return k == i ? t.element : null;
+        if (k == i) {
+            return t.element;
+        } else{
+            throw new IndexOutOfBoundsException();
+        }
     }
 
     /**
      * Get k to last element
-     * @param k -- number of the elemnt from end of list
+     * @param k -- number of the element from end of list
      * @return -- element
      */
     T getKToLast(int k) {
