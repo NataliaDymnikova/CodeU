@@ -33,18 +33,23 @@ public class TreeTest {
     }
 
     @Test
+    public void testWithOneIsAncestor() throws Exception {
+        assertEquals(tree.getCommonAncestor(2, 4).intValue(), 2);
+    }
+
+    @Test
     public void testWithCommonAncestor() throws Exception {
         assertEquals(tree.getCommonAncestor(4, 10).intValue(), 2);
     }
 
-    @Test(expected = TreeException.NoCommonAncestor.class)
+    @Test
     public void testForFirstRootElement() throws Exception {
-        tree.getCommonAncestor(-2, 10);
+        assertEquals(tree.getCommonAncestor(-2, 10).intValue(), -2);
     }
 
-    @Test(expected = TreeException.NoCommonAncestor.class)
+    @Test
     public void testForSecondRootElement() throws Exception {
-        tree.getCommonAncestor(0, -2);
+        assertEquals(tree.getCommonAncestor(0, -2).intValue(), -2);
     }
 
     @Test(expected = TreeException.ElementDoesntFound.class)

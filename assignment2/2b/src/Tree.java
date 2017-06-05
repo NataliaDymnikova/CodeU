@@ -1,5 +1,11 @@
+import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static java.util.Arrays.asList;
 
 /**
  * Tree for getting common ancestors
@@ -44,79 +50,71 @@ public class Tree<T> {
             }
             return true;
         } else {
-            return (left != null && left.add(newValue, parentVal, isLeft))
-                    || (right != null && right.add(newValue, parentVal, isLeft));
+            boolean res = false;
+            if (left != null) {
+                res = left.add(newValue, parentVal, isLeft);
+            } if (!res && right != null) {
+               res = right.add(newValue, parentVal, isLeft);
+            }
+
+            return res;
         }
     }
 
     /**
-     *
      * Get common ancestor
      *
      * @param element1 -- first element
      * @param element2 -- second element
      * @return -- common ancestors for elements
      * @throws TreeException.ElementDoesntFound -- if element isn't in tree
-     * @throws TreeException.NoCommonAncestor -- if one of elements is root
      */
     T getCommonAncestor(T element1, T element2)
-            throws TreeException.ElementDoesntFound, TreeException.NoCommonAncestor {
-        if (value.equals(element1) || value.equals(element2)) {
-            throw new TreeException.NoCommonAncestor("No common ancestor for values " + element1.toString()
-                    + " and " + element2.toString());
-        }
-
-        List<T> parents1 = getParents(element1);
-        List<T> parents2 = getParents(element2);
-        if (parents1.isEmpty() && !value.equals(element1)) {
+            throws TreeException.ElementDoesntFound {
+        Entry<Tree<T>, Integer> el1 = findWithDepth(element1, 0);
+        Entry<Tree<T>, Integer> el2 = findWithDepth(element2, 0);
+        if (el1 == null) {
             throw new TreeException.ElementDoesntFound("element " + element1.toString() + " doesn't found");
-        } else if (parents2.isEmpty() && !value.equals(element2)) {
+        } else if (el2 == null) {
             throw new TreeException.ElementDoesntFound("element " + element2.toString() + " doesn't found");
         } else {
-            for (T i : parents1) {
-                if (parents2.contains(i)) {
-                    return i;
-                }
-            }
-        }
-
-        throw new TreeException.NoCommonAncestor("No common ancestor for values " + element1.toString()
-                + " and " + element2.toString());
-    }
-
-    /**
-     * Get list of parents for element. If element doesn't exist, return empty list
-     *
-     * @param element -- value of element
-     * @return -- list of ancestors
-     */
-    private List<T> getParents(T element) {
-        if (value.equals(element)) {
-            return getParents();
-        } else {
-            List<T> leftRes = left == null ? new LinkedList<T>() : left.getParents(element);
-            List<T> rightRes = right == null ? new LinkedList<T>() : right.getParents(element);
-            if (leftRes.isEmpty()) {
-                return rightRes;
-            } else {
-                return leftRes;
-            }
+            return getCommonAncestor(el1, el2);
         }
     }
 
     /**
-     * Get parents for current element
-     *
-     * @return list of ancestors
+     * Get common ancestor for two elements in the tree with known depth.
+     * @param el1 -- first element with depth.
+     * @param el2 -- second element with depth.
+     * @return -- value of common ancestor
      */
-    private List<T> getParents() {
-        if (parent == null) {
-            return new LinkedList<T>();
-        } else {
-            List<T> res = parent.getParents();
-            res.add(0, parent.value);
-            return res;
+    private T getCommonAncestor(Entry<Tree<T>, Integer> el1, Entry<Tree<T>, Integer> el2) {
+        while (el2.getValue() > el1.getValue()) {
+            el2 = new SimpleEntry<>(el2.getKey().parent, el2.getValue() - 1);
         }
+        while (el1.getValue() > el2.getValue()) {
+            el1 = new SimpleEntry<>(el1.getKey().parent, el1.getValue() - 1);
+        }
+        while (!el1.getKey().value.equals(el2.getKey().value)) {
+            el1 = new SimpleEntry<>(el1.getKey().parent, el1.getValue() - 1);
+            el2 = new SimpleEntry<>(el2.getKey().parent, el2.getValue() - 1);
+        }
+        return el1.getKey().value;
     }
 
+    /**
+     * Find element with depth
+     * @param element -- element to find
+     * @param depth -- current depth. 0 in the beginning
+     * @return -- element and depth
+     */
+    private Entry<Tree<T>, Integer> findWithDepth(T element, int depth) {
+        if (element.equals(value)) {
+            return new SimpleEntry<>(this, depth);
+        }
+        Entry<Tree<T>, Integer> rght = right == null ? null : right.findWithDepth(element, depth + 1);
+        Entry<Tree<T>, Integer> lft = left == null ? null : left.findWithDepth(element, depth + 1);
+
+        return rght == null ? lft : rght;
+    }
 }
