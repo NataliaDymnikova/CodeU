@@ -53,7 +53,8 @@ public class Tree<T> {
             boolean res = false;
             if (left != null) {
                 res = left.add(newValue, parentVal, isLeft);
-            } if (!res && right != null) {
+            }
+            if (!res && right != null) {
                res = right.add(newValue, parentVal, isLeft);
             }
 
@@ -112,9 +113,9 @@ public class Tree<T> {
         if (element.equals(value)) {
             return new SimpleEntry<>(this, depth);
         }
-        Entry<Tree<T>, Integer> rght = right == null ? null : right.findWithDepth(element, depth + 1);
-        Entry<Tree<T>, Integer> lft = left == null ? null : left.findWithDepth(element, depth + 1);
+        Entry<Tree<T>, Integer> rightEntry = right == null ? null : right.findWithDepth(element, depth + 1);
+        Entry<Tree<T>, Integer> leftEntry = left == null ? null : left.findWithDepth(element, depth + 1);
 
-        return rght == null ? lft : rght;
+        return rightEntry == null ? leftEntry : rightEntry;
     }
 }
