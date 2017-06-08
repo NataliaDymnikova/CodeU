@@ -32,14 +32,8 @@ public class Tree<T> {
         if (parentVal.equals(value)) {
             if (isLeft) {
                 left = new Tree<T>(newValue, this, left, null);
-                if (left.left != null) {
-                    left.left.parent = left;
-                }
             } else {
                 right = new Tree<T>(newValue, this, null, right);
-                if (right.right != null) {
-                    right.right.parent = right;
-                }
             }
             return true;
         } else {
@@ -49,16 +43,31 @@ public class Tree<T> {
     }
 
     /**
-     * Get list of ancestors for element
+     * Get list of ancestors for element. If element doesn't exist, throw exception
+     * @param element -- value of element
+     * @return -- list of ancestors
+     * @throws TreeException.ElementDoesntFound -- if element isn't in tree
+     */
+    List<T> getAncestors(T element) throws TreeException.ElementDoesntFound {
+        List<T> parents = getParents(element);
+        if (parents.isEmpty() && !value.equals(element)) {
+            throw new TreeException.ElementDoesntFound("element " + element.toString() + " doesn't found");
+        } else {
+            return parents;
+        }
+    }
+
+    /**
+     * Get list of parents for element. If element doesn't exist, return empty list
      * @param element -- value of element
      * @return -- list of ancestors
      */
-    List<T> getAncestors(T element) {
+    private List<T> getParents(T element) {
         if (value.equals(element)) {
             return getParents();
         } else {
-            List<T> leftRes = left == null ? new LinkedList<T>() : left.getAncestors(element);
-            List<T> rightRes = right == null ? new LinkedList<T>() : right.getAncestors(element);
+            List<T> leftRes = left == null ? new LinkedList<T>() : left.getParents(element);
+            List<T> rightRes = right == null ? new LinkedList<T>() : right.getParents(element);
             if (leftRes.isEmpty()) {
                 return rightRes;
             } else {

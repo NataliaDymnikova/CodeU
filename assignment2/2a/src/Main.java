@@ -1,8 +1,7 @@
-import java.io.Console;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TreeException.ElementDoesntFound {
         Tree<Integer> tree = new Tree<Integer>(-2);
         tree.add(-1, -2, false);
 
