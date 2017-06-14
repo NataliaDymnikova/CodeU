@@ -10,21 +10,22 @@ import static java.util.stream.Collectors.toList;
 public class WordSearcher {
 
     /**
-     * Getting all words from the grid wich is in a dictionary
+     * Getting all words from the grid witch is in a dictionary
+     * Used DFS, complexity	 is O((numRows*numCols)^2)
      *
-     * @param r          -- number rows
-     * @param c          -- number columns
+     * @param numRows    -- number rows
+     * @param numCols    -- number columns
      * @param chars      -- 2-dimensial array of characters
      * @param dictionary -- dictionary with words
      * @return -- list of words
      */
-    static List<String> wordSearch(int r, int c, char[][] chars, Dictionary dictionary) {
+    static List<String> wordSearch(int numRows, int numCols, char[][] chars, Dictionary dictionary) {
         List<String> result = new LinkedList<>();
-        boolean[][] isUsed = new boolean[r][c];
+        boolean[][] isUsed = new boolean[numRows][numCols];
 
-        for (int i = 0; i < r; i++) {
-            for (int j = 0; j < c; j++) {
-                Set<String> words = getWords(i, j, Character.toString(chars[i][j]), r, c, chars, isUsed, dictionary);
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                Set<String> words = getWords(i, j, Character.toString(chars[i][j]), numRows, numCols, chars, isUsed, dictionary);
                 result.addAll(words);
             }
         }
