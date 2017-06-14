@@ -41,4 +41,24 @@ public class WordSearcherTest {
         List<String> words = WordSearcher.wordSearch(r, c, chars, dict);
         assertThat(words, containsInAnyOrder("car", "card", "cat"));
     }
+
+    @Test
+    public void testGetWordsWithoutRepeatedChars() {
+        int r = 1;
+        int c = 2;
+        char[][] chars = {{'d','a'}};
+        Dictionary dict = new Dictionary() {
+            @Override
+            public boolean isWord(String string) {
+                return string.equals("dada");
+            }
+
+            @Override
+            public boolean isPrefix(String string) {
+                return string.equals("d") || string.equals("da");
+            }
+        };
+        List<String> words = WordSearcher.wordSearch(r, c, chars, dict);
+        assertThat(words, empty());
+    }
 }
