@@ -14,11 +14,12 @@ public class CountingIslands {
      */
     public static int countingIslands(int numRows, int numCols, boolean[][] isLandArray) {
         int result = 0;
+        boolean[][] copyIsLandArray = isLandArray.clone();
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
-                if (isLandArray[i][j]) {
+                if (copyIsLandArray[i][j]) {
                     result++;
-                    deleteIsland(i, j, numRows, numCols, isLandArray);
+                    deleteIsland(i, j, numRows, numCols, copyIsLandArray);
                 }
             }
         }
