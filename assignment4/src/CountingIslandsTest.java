@@ -41,4 +41,27 @@ public class CountingIslandsTest {
         int islands = CountingIslands.countingIslands(4, 4, isLands);
         assertEquals(3, islands);
     }
+
+    @Test
+    public void testIsSomeIslandsWithRiver() {
+        boolean[][] isLands = new boolean[][]{
+                {false, true, true, true},
+                {true, true, false, true},
+                {false, true, true, true},
+                {false, false, true, false}};
+        int islands = CountingIslands.countingIslands(4, 4, isLands);
+        assertEquals(1, islands);
+    }
+
+    @Test
+    public void testIsSomeIslandsOnRiver() {
+        boolean[][] isLands = new boolean[][]{
+                {true, true, true, true, true},
+                {true, false, false, false, true},
+                {true, false, true, false, true},
+                {true, false, false, true, true},
+                {true, true, true, true,true}};
+        int islands = CountingIslands.countingIslands(5, 5, isLands);
+        assertEquals(2, islands);
+    }
 }
