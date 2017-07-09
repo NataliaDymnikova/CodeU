@@ -1,69 +1,71 @@
-import java.util.LinkedList;
 import java.util.List;
 
-public class UnknownLanguage {
+class UnknownLanguage {
     /**
      * Get ordered list of characters of the language
      *
-     * @param dictionary
-     * @return
+     * Complexity: O(n*maxlength)
+     *
+     * @param dictionary -- ordered list of words
+     * @return -- ordered list of chars
      */
-    public static List<Character> getAlphabet(List<String> dictionary) {
-        List<Character> alphabet = new LinkedList<>();
+    static List<Character> getAlphabet(List<String> dictionary) {
+        Tree<Character> alphabet = new Tree<>();
         int size = dictionary.size();
         for (int i = 0; i < size - 1; i++) {
             String word1 = dictionary.get(i);
             String word2 = dictionary.get(i + 1);
 
-            getLettersOnTheOrder(word1, word2, alphabet);
+            getLettersInOrder(word1, word2, alphabet);
         }
         getLettersOfWord(0, dictionary.get(size - 1), alphabet);
 
-        return alphabet;
+        return alphabet.createListInOrder();
     }
 
-    private static void getLettersOnTheOrder(String word1, String word2, List<Character> alphabet) {
-        int beginIndex = getFirstLettersWithOrder(word1, word2, alphabet);
+    /**
+     * Add chars to the alphabet in order
+     * @param word1
+     * @param word2
+     * @param alphabet
+     */
+    private static void getLettersInOrder(String word1, String word2, Tree<Character> alphabet) {
+        int beginIndex = getFirstLettersInOrder(word1, word2, alphabet);
         getLettersOfWord(beginIndex, word1, alphabet);
         getLettersOfWord(beginIndex, word2, alphabet);
     }
 
-    private static int getFirstLettersWithOrder(String word1, String word2, List<Character> alphabet) {
+    /**
+     * Add first chars which equals and on next which we could find out the order
+     * @param word1
+     * @param word2
+     * @param alphabet
+     * @return -- index of element which goes without order
+     */
+    private static int getFirstLettersInOrder(String word1, String word2, Tree<Character> alphabet) {
         int size = word1.length();
         for (int i = 0; i < size; i++) {
             char ch1 = word1.charAt(i);
             char ch2 = word2.charAt(i);
             if (ch1 != ch2) {
-                int ind1 = alphabet.indexOf(ch1);
-                int ind2 = alphabet.indexOf(ch2);
-                if (ind1 == -1 && ind2 == -1) {
-                    alphabet.add(ch1);
-                    alphabet.add(ch2);
-                } else if (ind2 == -1) {
-                    alphabet.add(ind1 + 1, ch2);
-                } else if (ind1 == -1) {
-                    alphabet.add(ind2, ch1);
-                } else if (ind1 > ind2) {
-                    alphabet.remove(ind1);
-                    alphabet.add(ind2, ch1);
-                }
+                alphabet.addElements(ch1, ch2);
                 return i + 1;
             }
-            addToEndIfAbsent(ch1, alphabet);
+            alphabet.addElement(ch1);
         }
         return size;
     }
 
-    private static void getLettersOfWord(int beginIndex, String str, List<Character> alphabet) {
-        for (Character ch : str.toCharArray()) {
-            addToEndIfAbsent(ch, alphabet);
+    /**
+     * Add chars to alphabet without order from beginIndex to end of string
+     * @param beginIndex -- index of first char which will be added
+     * @param str -- string
+     * @param alphabet
+     */
+    private static void getLettersOfWord(int beginIndex, String str, Tree<Character> alphabet) {
+        int size = str.length();
+        for (int i = beginIndex; i < size; i++) {
+            alphabet.addElement(str.charAt(i));
         }
     }
-
-    private static void addToEndIfAbsent(char ch1, List<Character> alphabet) {
-        if (!alphabet.contains(ch1)) {
-            alphabet.add(ch1);
-        }
-    }
-
 }
