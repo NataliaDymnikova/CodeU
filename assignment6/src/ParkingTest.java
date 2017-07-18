@@ -9,7 +9,6 @@ import static org.junit.Assert.assertThat;
 
 
 public class ParkingTest {
-
     private Parking parking = new Parking();
 
     @Test
