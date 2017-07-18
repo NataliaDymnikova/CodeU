@@ -3,10 +3,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import static java.util.Collections.nCopies;
 
 public class Parking {
+    private final static Logger logger = Logger.getLogger(Parking.class.getName());
+
     public List<Entry<Integer, Integer>> RearrangingCars(int[] beginParking, int[] endParking) {
         List<Integer> beginCarsPosition = createCarsPositionList(beginParking);
         List<Integer> endCarsPosition = createCarsPositionList(endParking);
@@ -19,7 +22,7 @@ public class Parking {
                 swap(0, shouldBeAtPositionOfZero, beginCarsPosition);
 
                 movements.add(new SimpleEntry<>(beginCarsPosition.get(0), positionOfZero));
-                System.out.println("move from " + beginCarsPosition.get(0) + " to " + positionOfZero);
+                logger.finer("move from " + beginCarsPosition.get(0) + " to " + positionOfZero);
             } else {
                 int carToZero = firstDifferentCar(beginCarsPosition, endCarsPosition);
                 if (carToZero == -1) {
@@ -30,7 +33,7 @@ public class Parking {
                 swap(0, carToZero, beginCarsPosition);
 
                 movements.add(new SimpleEntry<>(beginCarsPosition.get(0), positionOfZero));
-                System.out.println("move from " + beginCarsPosition.get(0) + " to " + positionOfZero);
+                logger.finer("move from " + beginCarsPosition.get(0) + " to " + positionOfZero);
             }
         }
 
