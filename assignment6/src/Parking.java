@@ -9,8 +9,6 @@ import static java.util.Collections.nCopies;
  * Parking class for rearranging cars
  */
 public class Parking {
-    private final static Logger logger = Logger.getLogger(Parking.class.getName());
-
     /**
      * Return sequence of movement cars (from which places cars move to which).
      * Function changes beginParking.

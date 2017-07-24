@@ -1,7 +1,10 @@
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 public class Movement {
+    private final static Logger logger = Logger.getLogger(Movement.class.getName());
+
     private int from;
     private int to;
 
@@ -11,7 +14,7 @@ public class Movement {
     }
 
     public void print() {
-        System.out.println("move from " + from + " to position " + to);
+        logger.info("move from " + from + " to " + to);
     }
 
     public Entry<Integer, Integer> getValues() {
