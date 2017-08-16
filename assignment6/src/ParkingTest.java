@@ -1,12 +1,13 @@
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
+import static java.util.Arrays.stream;
+import static java.util.Collections.shuffle;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 
 public class ParkingTest {
@@ -48,12 +49,47 @@ public class ParkingTest {
         checkEntries(new int[][]{{0, 2}, {3, 0}, {1, 3}, {2, 1}}, movements);
     }
 
+    @Test
+    public void testWithCyclicalMovements() {
+        int[] beginParking = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+        int[] endParkingExpected = {2, 3, 4, 5, 6, 7, 8, 9, 0, 1};
+        List<Movement> movements = parking.RearrangingCars(beginParking, endParkingExpected);
+        int[] endParking = makeMovements(movements, beginParking);
+        assertArrayEquals(endParkingExpected, endParking);
+    }
+
+    @Test
+    public void bigRandomTest() {
+        int[] beginParking = new int[100];
+        Arrays.parallelSetAll(beginParking, operand -> operand);
+        List<Integer> listToShuffle = stream(beginParking).boxed().collect(toList());
+        shuffle(listToShuffle);
+        int[] endParkingExpected = listToShuffle.stream().mapToInt(i -> i).toArray();
+
+        List<Movement> movements = parking.RearrangingCars(beginParking, endParkingExpected);
+        int[] endParking = makeMovements(movements, beginParking);
+        assertArrayEquals(endParkingExpected, endParking);
+    }
+
     private void checkEntries(int[][] realMovements, List<Movement> expectedMovements) {
         int size = expectedMovements.size();
         assertThat(size, is(realMovements.length));
         for (int i = 0; i < size; i++) {
-            Entry<Integer, Integer> entry = expectedMovements.get(i).getValues();
-            assertThat(new int[]{entry.getKey(), entry.getValue()}, is(realMovements[i]));
+            assertThat(new int[]{expectedMovements.get(i).getFrom(), expectedMovements.get(i).getTo()}, is(realMovements[i]));
         }
+    }
+
+    private int[] makeMovements(List<Movement> movements, int[] beginParking) {
+        int[] endParking = beginParking.clone();
+        for (Movement move : movements) {
+            swap(endParking, move.getFrom(), move.getTo());
+        }
+        return endParking;
+    }
+
+    private void swap(int[] beginParking, int from, int to) {
+        int fromValue = beginParking[from];
+        beginParking[from] = beginParking[to];
+        beginParking[to] = fromValue;
     }
 }

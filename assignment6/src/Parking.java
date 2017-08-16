@@ -1,9 +1,9 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
+import static java.util.Arrays.stream;
 import static java.util.Collections.nCopies;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Parking class for rearranging cars
@@ -21,21 +21,23 @@ public class Parking {
      */
     public List<Movement> RearrangingCars(int[] beginParking, int[] endParking) {
         List<Integer> beginCarsPosition = createCarsPositionList(beginParking);
-        List<Movement> movements = new LinkedList<>();
+        List<Movement> movements = new ArrayList<>();
+        List<Integer> beginParkingList = stream(beginParking).boxed().collect(toList());
+        List<Integer> endParkingList = stream(endParking).boxed().collect(toList());
 
         while (true) {
             int posOfZero = beginCarsPosition.get(0);
-            int carToPosOfZero = endParking[posOfZero];
+            int carToPosOfZero = endParkingList.get(posOfZero);
             int posOfCarToZeroPos = beginCarsPosition.get(carToPosOfZero);
 
-            if (endParking[posOfZero] != 0) {
-                makeMovement(posOfZero, posOfCarToZeroPos, beginCarsPosition, beginParking, movements);
+            if (carToPosOfZero != 0) {
+                makeMovement(posOfZero, posOfCarToZeroPos, beginCarsPosition, beginParkingList, movements);
             } else {
-                int posCarToZero = firstPosDifferentCar(beginParking, endParking);
+                int posCarToZero = firstPosDifferentCar(beginParkingList, endParkingList);
                 if (posCarToZero == -1) {
                     break;
                 }
-                makeMovement(posOfZero, posCarToZero, beginCarsPosition, beginParking, movements);
+                makeMovement(posOfZero, posCarToZero, beginCarsPosition, beginParkingList, movements);
             }
         }
 
@@ -51,8 +53,8 @@ public class Parking {
      * @param beginParking      -- array of positions cars where cars will be swapped
      * @param movements         -- list to adding movement
      */
-    private void makeMovement(int pos1, int pos2, List<Integer> beginCarsPosition, int[] beginParking, List<Movement> movements) {
-        swap(0, beginParking[pos2], beginCarsPosition);
+    private void makeMovement(int pos1, int pos2, List<Integer> beginCarsPosition, List<Integer> beginParking, List<Movement> movements) {
+        swap(0, beginParking.get(pos2), beginCarsPosition);
         swap(pos1, pos2, beginParking);
 
         Movement movement = new Movement(beginCarsPosition.get(0), pos1);
@@ -67,10 +69,10 @@ public class Parking {
      * @param endParking   -- sequence of cars on the end
      * @return -- position of the car, -1 if all cars are on the right places
      */
-    private int firstPosDifferentCar(int[] beginParking, int[] endParking) {
-        int size = beginParking.length;
+    private int firstPosDifferentCar(List<Integer> beginParking, List<Integer> endParking) {
+        int size = beginParking.size();
         for (int i = 0; i < size; i++) {
-            if (beginParking[i] != endParking[i]) {
+            if (!beginParking.get(i).equals(endParking.get(i))) {
                 return i;
             }
         }
@@ -92,16 +94,9 @@ public class Parking {
         return carsPosition;
     }
 
-
-    private void swap(int pos1, int pos2, int[] parking) {
-        parking[pos1] ^= parking[pos2];
-        parking[pos2] ^= parking[pos1];
-        parking[pos1] ^= parking[pos2];
-    }
-
     private void swap(int pos1, int pos2, List<Integer> parking) {
-        parking.set(pos1, parking.get(pos1) ^ parking.get(pos2));
-        parking.set(pos2, parking.get(pos2) ^ parking.get(pos1));
-        parking.set(pos1, parking.get(pos1) ^ parking.get(pos2));
+        int from = parking.get(pos1);
+        parking.set(pos1, parking.get(pos2));
+        parking.set(pos2, from);
     }
 }

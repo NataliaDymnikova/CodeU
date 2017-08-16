@@ -1,5 +1,3 @@
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 public class Movement {
@@ -17,7 +15,11 @@ public class Movement {
         logger.info("move from " + from + " to " + to);
     }
 
-    public Entry<Integer, Integer> getValues() {
-        return new SimpleEntry<>(from, to);
+    public int getFrom() {
+        return from;
+    }
+
+    public int getTo() {
+        return to;
     }
 }
